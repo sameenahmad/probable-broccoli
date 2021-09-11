@@ -9,4 +9,4 @@ Here's how you can use:
 
 That's it! Next time you play a playlist, All the ads are skipped themselves without having to listen to "Music sunte sunte Ad agaye! 🥲" 🎉
 
-P.S Right now you have to open a playlist to get it to work, Don't support the home page yet. 🎈
+P.S Right now you have to open a playlist to get it to work, this doesn't support the home page yet. 🎈
