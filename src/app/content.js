@@ -9,7 +9,6 @@ chrome.runtime.sendMessage({}, (response) => {
 let title;
 new MutationObserver(function (mutations) {
     title = document.title;
-    console.log("🚀 ~ file: content.js ~ line 32 ~ title", title)
     removeAds();
 }).observe(
     document.querySelector('title'),
