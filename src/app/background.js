@@ -3,4 +3,3 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({})
 })
 
-console.log("hurray");

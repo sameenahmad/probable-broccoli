@@ -36,16 +36,22 @@ const removeAds = async () => {
 
 const playLastSong = () => {
     if (sessionStorage.getItem("refreshed") === "true") {
-        setTimeout(() => {
-            const rowIndex = parseInt(sessionStorage.getItem("rowIndex"));
-            const nextSongIndex = rowIndex + 1;
-            const elems = document.querySelectorAll(`[aria-rowindex = "${nextSongIndex}"]`);
-            const elem = elems[0]
-            const playButton = elem.getElementsByTagName("button")[0];
-            playButton.click();
-        }, 3000);
+        const rowIndex = parseInt(sessionStorage.getItem("rowIndex"));
+        const nextSongIndex = rowIndex + 1;
+        const elems = document.querySelectorAll(`[aria-rowindex = "${nextSongIndex}"]`);
+        const elem = elems[0]
+        const playButton = elem.getElementsByTagName("button")[0];
+        playButton.click();
         sessionStorage.removeItem("refreshed");
+        return;
     }
+    setTimeout(playLastSong, 2000);
 }
 
-document.onload = playLastSong();
+
+
+document.onreadystatechange = function () {
+    if (document.readyState === 'complete') {
+        playLastSong();
+    }
+}
