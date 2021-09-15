@@ -25,8 +25,10 @@ const removeAds = async () => {
         window.location.reload();
     } else {
         const elems = document.getElementsByClassName("SzCNXJJQz7BiDOO0B2Xv");
-        const rowIndex = elems[0].parentElement.ariaRowIndex;
-        sessionStorage.setItem("rowIndex", rowIndex);
+        if (elems && elems.length > 0) {
+            const rowIndex = elems[0].parentElement.ariaRowIndex;
+            sessionStorage.setItem("rowIndex", rowIndex);
+        }
     }
 
 }
