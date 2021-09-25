@@ -16,19 +16,31 @@ const getActiveTab = () => new Promise((resolve, reject) => {
     );
 });
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
-    if (message && message.type === "focus-window") {
-        const activeTab = await getActiveTab();
+const focusSpotifyWindow = async (sender) => {
+    let activeTab;
+    try {
+        activeTab = await getActiveTab();
         if (!activeTab) {
-            return;
+            throw new Error("Internal tab");
         }
-        const tabId = sender.tab.id;
-        const updateProperties = { 'active': true };
-        chrome.tabs.update(tabId, updateProperties, (tab) => {
-            chrome.tabs.update(activeTab.id, updateProperties, () => {
-            })
-        });
+    }
+    catch (err) {
+        setTimeout(focusSpotifyWindow, 1000);
+        return;
+    }
+    const tabId = sender.tab.id;
+    const updateProperties = { 'active': true };
+    chrome.tabs.update(tabId, updateProperties, (tab) => {
+        chrome.tabs.update(activeTab.id, updateProperties, () => {
+        })
+    });
+}
+
+
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    if (message && message.type === "focus-window") {
+        focusSpotifyWindow(sender);
     }
 })
 
