@@ -1,11 +1,3 @@
-chrome.runtime.sendMessage({}, (response) => {
-    var checkReady = setInterval(() => {
-        if (document.readyState === "complete") {
-            clearInterval(checkReady)
-        }
-    })
-})
-
 let title;
 new MutationObserver(function (mutations) {
     title = document.title;
@@ -15,8 +7,6 @@ new MutationObserver(function (mutations) {
     { subtree: true, characterData: true, childList: true }
 );
 
-
-let pointer;
 
 
 const removeAds = async () => {
@@ -35,23 +25,32 @@ const removeAds = async () => {
 
 
 const playLastSong = () => {
-    if (sessionStorage.getItem("refreshed") === "true") {
-        const rowIndex = parseInt(sessionStorage.getItem("rowIndex"));
-        const nextSongIndex = rowIndex + 1;
-        const elems = document.querySelectorAll(`[aria-rowindex = "${nextSongIndex}"]`);
-        const elem = elems[0]
-        const playButton = elem.getElementsByTagName("button")[0];
-        playButton.click();
-        sessionStorage.removeItem("refreshed");
+    const rowIndex = parseInt(sessionStorage.getItem("rowIndex"));
+    const nextSongIndex = rowIndex + 1;
+    const elems = document.querySelectorAll(`[aria-rowindex = "${nextSongIndex}"]`);
+    if (elems && elems.length === 0) {
+        chrome.runtime.sendMessage({ type: "focus-window" })
+        setTimeout(playLastSong, 2000);
         return;
     }
-    setTimeout(playLastSong, 2000);
+    const elem = elems[0];
+    const playButton = elem.getElementsByTagName("button")[0];
+    playButton.click();
+    sessionStorage.removeItem("refreshed");
+}
+
+
+
+const byPassAdvertisement = () => {
+    if (sessionStorage.getItem("refreshed") === "true") {
+        playLastSong();
+    }
 }
 
 
 
 document.onreadystatechange = function () {
     if (document.readyState === 'complete') {
-        playLastSong();
+        byPassAdvertisement();
     }
 }
